@@ -9,6 +9,7 @@ class Node {
 class LinkedList {
   constructor(head=null) {
     this.head = head;
+    this.size = head ? 1 : 0;
   }
 
   append(node) {
@@ -17,6 +18,48 @@ class LinkedList {
       current = current.next;
     }
     current.next = node;
+    this.size++;
+  }
+
+  prepend(node) {
+    const temp = this.head;
+    this.head = node;
+    this.head.next = temp;
+    this.size++;
+  }
+
+  shift() {
+    this.head = this.head.next;
+    this.size--;
+  }
+
+  remove(val) {
+    let pointer = this.head;
+    let prev;
+    while(pointer) { 
+      if (pointer.value === val) {
+        if (prev) {
+          prev.next = pointer.next;
+          this.size--;
+          return;
+        } else {
+          this.shift()
+        }
+      }
+      prev = pointer;
+      pointer = pointer.next;
+    }
+  }
+
+  pivot(val) {
+    let pointer = this.head;
+    for (let i=0; i<this.size; i++) {
+      if (pointer.value >= val) {
+        this.remove(pointer.value);
+        this.append(new Node(pointer.value));
+      }
+      pointer = pointer.next;
+    }
   }
 
   toArray() {
