@@ -1,28 +1,39 @@
 class CircularArray {
   constructor() {
     this.items = [];
+    this.head = 0;
   }
 
   printArray() {
-    for (let item of this.items) {
-      console.log(item);
+    for (let i=this.head; i<this.items.length; i++) {
+      console.log(this.items[i]);
+    }
+    for (let i=0; i<this.head; i++) {
+      console.log(this.items[i]);
     }
   }
 
   addItem(item) {
-    this.items.push(item);
+    if (this.head === 0) this.items.push(item);
+    else {
+      const arr = this.items.slice(0, this.head);
+      arr.push(item);
+      this.items = arr.concat(this.items.slice(this.head));
+      this.head++;
+    }
   }
 
   getByIndex(idx) {
-    return this.items[idx] ? this.items[idx] : null;
+    if (idx >= 0 && idx < this.items.length) {
+      return this.items[(this.head + idx) % this.items.length] 
+    } else return null;
   }
 
   rotate(num) {
-    let newItems = [];
-    let len = this.items.length;
-    for (let i=0; i<len; i++) {
-      newItems[i] = this.items[(i + num % len) % len];
+    if (num > 0) {
+      this.head = (this.head + num) % this.items.length;
+    } else if (num < 0) {
+      this.head = (this.head + (num % this.items.length) + this.items.length);
     }
-    this.items = newItems;
   }
 }
