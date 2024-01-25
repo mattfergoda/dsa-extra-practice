@@ -13,6 +13,12 @@ class LinkedList {
   }
 
   append(node) {
+    if (this.size === 0) {
+      this.head = node;
+      this.size++;
+      return;
+    }
+
     let current = this.head;
     while(current.next) {
       current = current.next;
@@ -82,9 +88,11 @@ function sortLinkedLists(a, b) {
 
   if (a.head.value < b.head.value) {
     sorted.head = new Node(a.head.value);
+    sorted.size++;
     aPointer = a.head.next;
   } else {
     sorted.head = new Node(b.head.value);
+    sorted.size++;
     bPointer = b.head.next;
   }
 
