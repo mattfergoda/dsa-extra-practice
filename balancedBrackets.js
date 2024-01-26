@@ -56,5 +56,5 @@ function balancedBrackets(input) {
 
 }
 
-balancedBrackets("(hi [there])");
+module.exports = { balancedBrackets };
 
