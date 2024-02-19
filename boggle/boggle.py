@@ -112,26 +112,39 @@ def make_board(board_string):
 def find(board, word):
     """Can word be found in board?"""
 
-    def _find(board, word, start_i, start_j):
-        breakpoint()
+    def _find(board, word, start_i, start_j, seen):
         if word == "":
             return True
         
+        seen.append((start_i, start_j))
+
         # North
-        if start_i > 0 and board[start_i - 1][start_j] == word[0]:
-            return _find(board, word[1:], start_i - 1, start_j)
+        if (start_i > 0 and 
+            (start_i - 1, start_j) not in seen and 
+            board[start_i - 1][start_j] == word[0] and
+            _find(board, word[1:], start_i - 1, start_j, seen)):
+            return True
         
         # South
-        if start_i < len(board) - 1 and board[start_i + 1][start_j] == word[0]:
-            return _find(board, word[1:], start_i + 1, start_j)
+        if (start_i < len(board) - 1 and 
+            (start_i + 1, start_j) not in seen and 
+            board[start_i + 1][start_j] == word[0]
+            and _find(board, word[1:], start_i + 1, start_j, seen)):
+            return True
         
         # East
-        if start_j < len(board[0]) - 1 and board[start_i][start_j + 1] == word[0]:
-            return _find(board, word[1:], start_i, start_j + 1)
+        if (start_j < len(board[0]) - 1 and 
+            (start_i, start_j + 1) not in seen and 
+            board[start_i][start_j + 1] == word[0] and
+            _find(board, word[1:], start_i, start_j + 1, seen)):
+            return True
         
         # West
-        if start_j > 0 and board[start_i][start_j - 1] == word[0]:
-            return _find(board, word[1:], start_i, start_j - 1)
+        if (start_j > 0 and 
+            (start_i, start_j - 1) not in seen and 
+            board[start_i][start_j - 1] == word[0] and
+            _find(board, word[1:], start_i, start_j - 1, seen)):
+            return True
         
         return False
     
@@ -139,7 +152,7 @@ def find(board, word):
     for i, _ in enumerate(board):
         for j, _ in enumerate(board[i]):
             if board[i][j] == word[0]:
-                if _find(board, word[1:], i, j):
+                if _find(board, word[1:], i, j, []):
                     return True
                 else: 
                     pass
